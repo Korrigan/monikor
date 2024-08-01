@@ -73,8 +73,7 @@ size_t varnish_fetch_metrics(varnish_module_t *mod, const char *output) {
   output_start = output;
   for (size_t i = 0; metrics[i].name; i++) {
     while (found = strstr(output, metrics[i].varnish_name)) {
-      if ((found = strstr(output, metrics[i].varnish_name))
-      && ((found - VARNISH_SMA_TRANSIENT_LEN < output_start)
+      if (((found - VARNISH_SMA_TRANSIENT_LEN < output_start)
           || strncmp(found - VARNISH_SMA_TRANSIENT_LEN, VARNISH_SMA_TRANSIENT,
               VARNISH_SMA_TRANSIENT_LEN))
       && (isspace(found[strlen(metrics[i].varnish_name)]))) {
