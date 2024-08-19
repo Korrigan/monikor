@@ -70,11 +70,10 @@ size_t varnish_fetch_metrics(varnish_module_t *mod, const char *output) {
 
   gettimeofday(&clock, NULL);
   for (size_t i = 0; metrics[i].name; i++) {
-    for (found = output; (found = strstr(found, metrics[i].varnish_name)); found += strlen(metrics[i].varnish_name))
+    for (found = output; (found = strstr(found, metrics[i].varnish_name)); found += strlen(metrics[i].varnish_name)) {
       if (((found - VARNISH_SMA_TRANSIENT_LEN < output)
-          || strncmp(found - VARNISH_SMA_TRANSIENT_LEN, VARNISH_SMA_TRANSIENT,
-              VARNISH_SMA_TRANSIENT_LEN))
-      && (isspace(found[strlen(metrics[i].varnish_name)]))) {
+          || strncmp(found - VARNISH_SMA_TRANSIENT_LEN, VARNISH_SMA_TRANSIENT, VARNISH_SMA_TRANSIENT_LEN))
+          && (isspace(found[strlen(metrics[i].varnish_name)]))) {
         char *endval;
         char *val = found + strlen(metrics[i].varnish_name);
         uint64_t value = strtoull(val, &endval, 10);
