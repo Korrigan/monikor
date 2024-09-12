@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([quanta-agent],[1.3.0],[support@quanta.io])
+AC_INIT([quanta-agent],[1.3.1],[support@quanta.io])
 AM_INIT_AUTOMAKE([subdir-objects])
 LT_INIT
 

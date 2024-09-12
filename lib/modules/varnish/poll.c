@@ -70,21 +70,23 @@ size_t varnish_fetch_metrics(varnish_module_t *mod, const char *output) {
 
   gettimeofday(&clock, NULL);
   for (size_t i = 0; metrics[i].name; i++) {
-    if ((found = strstr(output, metrics[i].varnish_name))
-    && ((found - VARNISH_SMA_TRANSIENT_LEN < output)
-        || strncmp(found - VARNISH_SMA_TRANSIENT_LEN, VARNISH_SMA_TRANSIENT,
-            VARNISH_SMA_TRANSIENT_LEN))) {
-      char *endval;
-      char *val = found + strlen(metrics[i].name);
-      uint64_t value = strtoull(val, &endval, 10);
-      if (val == endval)
-        continue;
-      if (mod->instance)
-        sprintf(metric_name, "%s.%s", metrics[i].name, mod->instance);
-      else
-        sprintf(metric_name, "%s", metrics[i].name);
-      n_metrics += monikor_metric_push(mod->mon, monikor_metric_integer(
-        metric_name, &clock, value, metrics[i].flags));
+    for (found = output; (found = strstr(found, metrics[i].varnish_name)); found += strlen(metrics[i].varnish_name)) {
+      if (((found - VARNISH_SMA_TRANSIENT_LEN < output)
+          || strncmp(found - VARNISH_SMA_TRANSIENT_LEN, VARNISH_SMA_TRANSIENT, VARNISH_SMA_TRANSIENT_LEN))
+          && (isspace(found[strlen(metrics[i].varnish_name)]))) {
+        char *endval;
+        char *val = found + strlen(metrics[i].varnish_name);
+        uint64_t value = strtoull(val, &endval, 10);
+        if (val == endval)
+          continue;
+        if (mod->instance)
+          sprintf(metric_name, "%s.%s", metrics[i].name, mod->instance);
+        else
+          sprintf(metric_name, "%s", metrics[i].name);
+        n_metrics += monikor_metric_push(mod->mon, monikor_metric_integer(
+          metric_name, &clock, value, metrics[i].flags));
+        break;
+      }
     }
   }
 
