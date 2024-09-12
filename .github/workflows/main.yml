@@ -56,7 +56,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [debian, centos, ubuntu]
-        version: [buster, bullseye, bookworm, 7, 8, 9, oracular, noble, mantic, jammy, kinetic, lunar]
+        version: [buster, bullseye, bookworm, 7, 8, 9, noble, mantic, jammy, kinetic, lunar]
         exclude:
           - os: debian
             version: 7
@@ -64,8 +64,6 @@ jobs:
             version: 8
           - os: debian
             version: 9
-          - os: debian
-            version: oracular
           - os: debian
             version: noble
           - os: debian
@@ -82,8 +80,6 @@ jobs:
             version: bullseye
           - os: centos
             version: bookworm
-          - os: centos
-            version: oracular
           - os: centos
             version: noble
           - os: centos
@@ -119,7 +115,7 @@ jobs:
       with:
         ssh-key: ${{ secrets.BUILDOZER_DEPLOY_KEY }}
         repository: quanta-computing/buildozer
-        ref: 'new-packages-worflow'
+        ref: 'master'
         persist-credentials: true
         path: tools
 
